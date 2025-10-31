@@ -1,7 +1,15 @@
+"""Игра угадай число
+Компьютер сам загадывает и сам угадывает число
+Задачка на проверку алгоритмов
+"""
+
 import numpy as np
 
 def random_predict(number:int=1) -> int:
-    """Рандомно угадываем число
+    """Изначальная функция
+    Взято из задания
+    
+    Рандомно угадываем число
 
     Args:
         number (int, optional): Загаданное число. Defaults to 1.
@@ -19,10 +27,24 @@ def random_predict(number:int=1) -> int:
             break # выход из цикла, если угадали
     return(count)
 
-def random_predict_2(number:int=1) -> int:
+def random_predict_modified(number:int=1, random_state:bool=False) -> int:
+    """Усовершенствованный алгоритм угадывания
+
+    Args:
+        number (int, optional):  Передаем число для угадывания. Defaults to 1.
+        random_state (bool, optional): Если True генирирует загаданное число. Defaults to False.
+
+    Returns:
+        int: Число попыток
+    """
+    
     count = 0
+    
+    if random_state:
+        number = np.random.randint(lower_border, upper_border)
 
     predicted = False
+    # Переменные, ограничивающе область предположения. Сначала от 1 до 100
     lower_border = 1
     upper_border = 101
     
@@ -31,19 +53,22 @@ def random_predict_2(number:int=1) -> int:
                 
         predict_number = np.random.randint(lower_border, upper_border) # предполагаемое число
         
+        # Если угадали цикл завершится после проверки условной переменной
         if number == predict_number:
             predicted = True
-        
+            
+        # Если не угадали и предполагаемое число больше - смещаем верхнюю границу до предполагаемого
+        # и наоборот
         elif predict_number > number: upper_border = predict_number
         else: lower_border = predict_number
         
     return(count)
 
-if __name__ == '__main__':
-    print(f'Количество попыток: {random_predict()}')
-
 def score_game(random_predict) -> int:
-    """За какое количество попыток в среднем из 1000 подходов угадывает наш алгоритм
+    """Взято из задания
+        
+    За какое количество попыток в среднем из 1000 подходов угадывает оригинальный и
+    модифицированный алгоритм
 
     Args:
         random_predict ([type]): функция угадывания
@@ -67,4 +92,5 @@ def score_game(random_predict) -> int:
 
 # RUN
 if __name__ == '__main__':
-    score_game(random_predict_2)
+    score_game(random_predict)
+    score_game(random_predict_modified)
