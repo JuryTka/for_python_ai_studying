@@ -27,23 +27,19 @@ def random_predict(number:int=1) -> int:
             break # выход из цикла, если угадали
     return(count)
 
-def random_predict_modified(number:int=1, random_state:bool=False) -> int:
+def random_predict_modified(number:int=1) -> int:
     """Усовершенствованный алгоритм угадывания
 
     Args:
         number (int, optional):  Передаем число для угадывания. Defaults to 1.
-        random_state (bool, optional): Если True генирирует загаданное число. Defaults to False.
 
     Returns:
         int: Число попыток
     """
     
     count = 0
-    
-    if random_state:
-        number = np.random.randint(lower_border, upper_border)
-
     predicted = False
+    
     # Переменные, ограничивающе область предположения. Сначала от 1 до 100
     lower_border = 1
     upper_border = 101
@@ -64,7 +60,7 @@ def random_predict_modified(number:int=1, random_state:bool=False) -> int:
         
     return(count)
 
-def score_game(random_predict) -> int:
+def score_game(random_predict, random_state:bool=False) -> int:
     """Взято из задания
         
     За какое количество попыток в среднем из 1000 подходов угадывает оригинальный и
@@ -72,13 +68,15 @@ def score_game(random_predict) -> int:
 
     Args:
         random_predict ([type]): функция угадывания
+        random_state (bool, optional): Если True генирирует загаданное число. Defaults to False.
 
     Returns:
         int: среднее количество попыток
     """
 
     count_ls = [] # список для сохранения количества попыток
-    np.random.seed(1) # фиксируем сид для воспроизводимости
+    if not random_state:
+        np.random.seed(1) # фиксируем сид для воспроизводимости
     random_array = np.random.randint(1, 101, size=(1000)) # загадали список чисел
 
     for number in random_array:
@@ -92,5 +90,5 @@ def score_game(random_predict) -> int:
 
 # RUN
 if __name__ == '__main__':
-    score_game(random_predict)
-    score_game(random_predict_modified)
+    score_game(random_predict, True)
+    score_game(random_predict_modified, True)
